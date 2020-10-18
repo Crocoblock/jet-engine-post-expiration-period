@@ -56,6 +56,10 @@ class Jet_Engine_Post_PE
             array( $this, 'handle_post_action' ),
             1, 2
         );
+        add_action(
+            $this->action_name,
+            [ $this, 'on_expiration' ], 1, 2
+        );
     }
 
     public function add_fields_to_insert_post() {
@@ -84,8 +88,6 @@ class Jet_Engine_Post_PE
     }
 
     public function set_period( $expiration_period, $post_id, $expiration_action ) {
-        add_action( $this->action_name, [ $this, 'on_expiration' ] );
-
         wp_schedule_single_event( $expiration_period, $this->action_name,
             [ $post_id, $expiration_action ]
         );
@@ -94,7 +96,8 @@ class Jet_Engine_Post_PE
     }
 
     public function on_expiration( $post_id, $expiration_action ) {
-        if ( get_post_status( $post_id ) === $expiration_action ) return;
+        if ( ! get_post_status( $post_id )
+            || get_post_status( $post_id ) === $expiration_action ) return;
 
         $update_post = [
             'ID'            => $post_id,
