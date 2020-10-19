@@ -13,6 +13,7 @@
         ?></div>
     <div class="jet-form-editor__row-control">
         <input type="number" min="1" v-model="currentItem.expiration_period">
+        <span>days</span>
     </div>
 </div>
 
