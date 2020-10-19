@@ -1,9 +1,3 @@
-<?php
-/**
-*
- */
-?>
-
 <div class="jet-form-editor__row" v-if="'insert_post' === currentItem.type">
 	<div class="jet-form-editor__row-label"><?php
 		_e( 'Enable expiration period:', 'jet-engine-post-expiration-period' );
