@@ -122,8 +122,8 @@ class Jet_Engine_Post_PE
             $expiration_period,
             $expiration_action
         );
-
-        $this->on_daily_check_expirations();
+        
+        $this->set_daily_cron();
     }
 
     public function set_meta_expiration( $post_id, $expiration_period, $expiration_action ) {
@@ -199,8 +199,6 @@ class Jet_Engine_Post_PE
 
             $this->schedule_posts();
         }
-
-        $this->set_daily_cron();
     }
 
     public function combine_posts() {
