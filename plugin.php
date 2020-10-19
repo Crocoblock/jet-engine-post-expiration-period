@@ -122,7 +122,7 @@ class Jet_Engine_Post_PE
             $expiration_period,
             $expiration_action
         );
-        
+
         $this->set_daily_cron();
     }
 
@@ -138,6 +138,17 @@ class Jet_Engine_Post_PE
             $this->action_meta_key,
             $expiration_action
         );
+    }
+
+    public function delete_meta_expiration( $id ) {
+            delete_post_meta(
+                $id,
+                $this->action_meta_key
+            );
+            delete_post_meta(
+                $id,
+                $this->period_meta_key
+            );
     }
 
     public function set_daily_cron() {
@@ -230,6 +241,8 @@ class Jet_Engine_Post_PE
                 $this->action_name,
                 array( $post_id, $post['action'] )
             );
+
+            $this->delete_meta_expiration( $post_id );
         }
     }
 
