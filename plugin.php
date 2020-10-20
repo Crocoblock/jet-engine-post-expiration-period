@@ -24,21 +24,14 @@ class Jet_Engine_Post_PE
 
     public $is_valid_period = false;
 
-    public $action_name = 'jet-engine-pep/on_expiration';
     public $daily_event = 'jet-engine-pep/daily_check_expirations';
     public $period_meta_key = '_jet_pep_period';
     public $action_meta_key = '_jet_pep_action';
-
-    public $post_id;
-    public $expiration_period;
-    public $expiration_action;
 
     public $expired_posts_with_period;
     public $expired_posts_with_action;
 
     public $schedule_posts;
-
-    const HOUR_IN_SECONDS = 60 * 60;
 
     public function __construct() {
         $this->can_init();
@@ -68,11 +61,6 @@ class Jet_Engine_Post_PE
         add_action(
             $this->daily_event,
             array( $this, 'on_daily_check_expirations' )
-        );
-        add_action(
-            $this->action_name,
-            array( $this, 'on_expiration' ),
-            1, 2
         );
     }
 
@@ -170,11 +158,10 @@ class Jet_Engine_Post_PE
 
         $start_from = strtotime( 'today' );
         $end_by = strtotime('tomorrow -1 SECOND');
-        $table = $wpdb->postmeta;
-        $meta_key = $this->period_meta_key;
 
-        $sql = "SELECT post_id, meta_value as expiration_period FROM $table
-                WHERE meta_key = $meta_key 
+        $sql = "SELECT post_id, meta_value as expiration_period 
+                FROM $wpdb->postmeta
+                WHERE meta_key = '$this->period_meta_key' 
                 AND ( meta_value BETWEEN $start_from AND $end_by );";
 
         $this->expired_posts_with_period = $wpdb->get_results( $sql, ARRAY_A );
@@ -183,18 +170,19 @@ class Jet_Engine_Post_PE
     public function find_expired_posts_with_action() {
         global $wpdb;
 
-        $post_ids = [];
-
-        foreach ( $this->expired_posts_with_period as $post ) {
-            $post_ids[] = $post_ids['post_id'];
+        if ( empty( $this->expired_posts_with_period ) ) {
+            return;
         }
 
+        $post_ids = [];
+        foreach ( $this->expired_posts_with_period as $post ) {
+            $post_ids[] = $post['post_id'];
+        }
         $str_ids = implode( ', ', $post_ids );
-        $table = $wpdb->postmeta;
-        $meta_key = $this->action_meta_key;
 
-        $sql = "SELECT post_id, meta_value as expiration_action FROM $table
-                WHERE meta_key = $meta_key 
+        $sql = "SELECT post_id, meta_value as expiration_action 
+                FROM $wpdb->postmeta
+                WHERE meta_key = '$this->action_meta_key' 
                 AND post_id IN ($str_ids);";
 
         $this->expired_posts_with_action = $wpdb->get_results( $sql, ARRAY_A );
@@ -210,6 +198,7 @@ class Jet_Engine_Post_PE
 
             $this->schedule_posts();
         }
+        $this->set_daily_cron();
     }
 
     public function combine_posts() {
@@ -223,7 +212,6 @@ class Jet_Engine_Post_PE
             if ( ! $this->schedule_posts[ $post_action['post_id'] ]['timestamp'] ) {
                 return;
             }
-
             $this->schedule_posts[ $post_action['post_id'] ]['action'] = $post_action['expiration_action'];
         }
     }
@@ -235,13 +223,11 @@ class Jet_Engine_Post_PE
             return;
         }
 
-        foreach ( $this->schedule_posts as $post_id => $post ) {
-            wp_schedule_single_event(
-                $post['timestamp'],
-                $this->action_name,
-                array( $post_id, $post['action'] )
-            );
+        error_log( var_export( $this->schedule_posts ) );
 
+        foreach ( $this->schedule_posts as $post_id => $post ) {
+
+            $this->on_expiration( $post_id, $post['action'] );
             $this->delete_meta_expiration( $post_id );
         }
     }
@@ -253,9 +239,9 @@ class Jet_Engine_Post_PE
         }
 
         $func_name = 'expiration_' . $expiration_action;
-
+        error_log( $post_id );
         if ( is_callable( [ $this, $func_name ] ) ) {
-            $this->$func_name();
+            $this->$func_name( $post_id );
         }
     }
 
