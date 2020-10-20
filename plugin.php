@@ -223,8 +223,6 @@ class Jet_Engine_Post_PE
             return;
         }
 
-        error_log( var_export( $this->schedule_posts ) );
-
         foreach ( $this->schedule_posts as $post_id => $post ) {
 
             $this->on_expiration( $post_id, $post['action'] );
@@ -239,7 +237,6 @@ class Jet_Engine_Post_PE
         }
 
         $func_name = 'expiration_' . $expiration_action;
-        error_log( $post_id );
         if ( is_callable( [ $this, $func_name ] ) ) {
             $this->$func_name( $post_id );
         }
