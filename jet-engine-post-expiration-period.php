@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: JetEngine Post Expiration Period
+ * Plugin Name: JetEngine - post expiration period
  * Plugin URI:
  * Description:
- * Version:     0.1
+ * Version:     1.0.0
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-engine-post-expiration-period
@@ -22,7 +22,7 @@ add_action( 'plugins_loaded', 'jet_engine_post_ep_init' );
 
 function jet_engine_post_ep_init() {
 
-    define( 'JET_ENGINE_POST_EP_VERSION', '0.1' );
+    define( 'JET_ENGINE_POST_EP_VERSION', '1.0.0' );
 
     define( 'JET_ENGINE_POST_EP__FILE__', __FILE__ );
     define( 'JET_ENGINE_POST_EP_PLUGIN_BASE', plugin_basename( JET_ENGINE_POST_EP__FILE__ ) );
