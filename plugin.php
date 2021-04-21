@@ -87,7 +87,7 @@ class Jet_Engine_Post_PE
         $period = absint( $period );
 
         $str_period = sprintf(
-            '+%b day',
+            '+%d day',
             $period
         );
 
