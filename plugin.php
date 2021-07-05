@@ -48,7 +48,7 @@ class Jet_Engine_Post_PE {
 
 		$this->hooks();
 		
-		add_action( 'init', function() {
+		/*add_action( 'init', function() {
 
 		    $pathinfo = pathinfo( JET_ENGINE_POST_EP_PLUGIN_BASE );
 
@@ -58,7 +58,7 @@ class Jet_Engine_Post_PE {
 			'version' => JET_ENGINE_POST_EP_VERSION
 		    ) );
 
-		}, 12 );
+		}, 12 );*/
 	}
 
 	public function hooks() {
