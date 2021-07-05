@@ -47,6 +47,18 @@ class Jet_Engine_Post_PE {
 		}
 
 		$this->hooks();
+		
+		add_action( 'init', function() {
+
+		    $pathinfo = pathinfo( JET_ENGINE_POST_EP_PLUGIN_BASE );
+
+		    jet_engine()->modules->updater->register_plugin( array(
+			'slug'    => $pathinfo['filename'],
+			'file'    => JET_ENGINE_POST_EP_PLUGIN_BASE,
+			'version' => JET_ENGINE_POST_EP_VERSION
+		    ) );
+
+		}, 12 );
 	}
 
 	public function hooks() {
