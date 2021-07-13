@@ -38,7 +38,7 @@ class Jet_Engine_Post_PE {
 	}
 
 	public function can_init() {
-		return function_exists( 'jet_engine' );
+		return function_exists( 'jet_engine' ) || function_exists( 'jet_form_builder' );
 	}
 
 	public function init() {
