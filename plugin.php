@@ -254,6 +254,13 @@ class Jet_Engine_Post_PE {
 		     || get_post_status( $post_id ) === $expiration_action ) {
 			return;
 		}
+		
+		$post = get_post( $post_id );
+
+		if ( $post ) {
+			$email = get_the_author_meta( 'user_email', $post->post_author );
+			wp_mail( $email, 'Subject - Your post is expired', 'Message - your post ' . $post->post_title . ' is expired'  );
+		}
 
 		$func_name = 'expiration_' . $expiration_action;
 		if ( is_callable( [ $this, $func_name ] ) ) {
