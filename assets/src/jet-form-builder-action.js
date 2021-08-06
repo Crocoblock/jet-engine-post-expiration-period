@@ -22,26 +22,34 @@ addFilter( 'jet.fb.render.action.insert_post', 'jet-form-builder', function( emp
 			checked={ settings.enable_expiration_period }
 			onChange={ newValue => onChangeSetting( newValue, 'enable_expiration_period' ) }
 		/>
-		<BaseControl
-			key={ 'expiration_period' }
-		>
-			<NumberControl
-				label={ __( 'Expiration period', 'jet-engine-post-expiration-period' ) }
-				key='step'
-				labelPosition='side'
-				value={ settings.expiration_period }
-				onChange={ newValue => onChangeSetting( Number( newValue ), 'expiration_period' ) }
-			/>
-		</BaseControl>
-		<RadioControl
-			className='jet-inline-radio'
-			label={ __( 'Expiration action', 'jet-engine-post-expiration-period' ) }
-			selected={ settings.expiration_action }
-			options={ [
-				{ label: 'Draft', value: 'draft' },
-				{ label: 'Trash', value: 'trash' },
-			] }
-			onChange={ newValue => onChangeSetting( newValue, 'expiration_action' ) }
-		/>
+		{ settings.enable_expiration_period && <>
+			<BaseControl
+				key={ 'expiration_period' }
+			>
+				<NumberControl
+					label={ __( 'Expiration period', 'jet-engine-post-expiration-period' ) }
+					key='step'
+					labelPosition='side'
+					min={ 1 }
+					value={ settings.expiration_period }
+					onChange={ newValue => onChangeSetting( Number( newValue ), 'expiration_period' ) }
+				/>
+			</BaseControl>
+			<BaseControl
+				label={ __( 'Expiration action', 'jet-engine-post-expiration-period' ) }
+			>
+				<div className="jet-user-fields-map__list jet-control-clear-full">
+					<RadioControl
+						className='jet-inline-radio'
+						selected={ settings.expiration_action }
+						options={ [
+							{ label: 'Draft', value: 'draft' },
+							{ label: 'Trash', value: 'trash' },
+						] }
+						onChange={ newValue => onChangeSetting( newValue, 'expiration_action' ) }
+					/>
+				</div>
+			</BaseControl>
+		</> }
 	</>;
 } )
