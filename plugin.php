@@ -30,8 +30,6 @@ class Jet_Engine_Post_PE {
 	public $period_meta_key = '_jet_pep_period';
 	public $action_meta_key = '_jet_pep_action';
 
-	public $attached_post_ids = array();
-
 	public $expired_posts;
 
 	public function __construct() {
@@ -88,28 +86,6 @@ class Jet_Engine_Post_PE {
 		);
 	}
 
-	public function get_last_inserted_post_id() {
-		$handler = jet_form_builder()->form_handler->action_handler;
-
-		if ( ! in_array( $handler->response_data['inserted_post_id'], $this->attached_post_ids ) ) {
-			$this->attached_post_ids[] = (int) $handler->response_data['inserted_post_id'];
-
-			return $handler->response_data['inserted_post_id'];
-		}
-
-		$inserted = $handler->response_data['inserted_posts'] ?? array();
-
-		foreach ( $inserted as $post_id ) {
-			if ( ! in_array( $post_id, $this->attached_post_ids ) ) {
-				$this->attached_post_ids[] = (int) $post_id;
-
-				return $post_id;
-			}
-		}
-
-		return 0;
-	}
-
 	/**
 	 * @param Base $action_instance
 	 * @param Action_Handler $action_handler
@@ -127,15 +103,9 @@ class Jet_Engine_Post_PE {
 			return;
 		}
 
-		$post_id = $this->get_last_inserted_post_id();
-
-		if ( 0 === $post_id ) {
-			return;
-		}
-
 		$this->init_expiration(
 			$period,
-			$post_id,
+			$action_handler->get_inserted_post_id( $action_instance->_id ),
 			$action_instance->settings['expiration_action']
 		);
 	}
