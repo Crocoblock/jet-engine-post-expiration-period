@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const { VueLoaderPlugin } = require( 'vue-loader' );
 
 module.exports = {
 	name: 'js_bundle',
@@ -12,33 +11,23 @@ module.exports = {
 		path: path.resolve( __dirname, 'js' ),
 		filename: '[name]'
 	},
-	devtool: 'inline-cheap-module-source-map',
+	devtool: 'eval-source-map',
 	resolve: {
 		modules: [
 			path.resolve( __dirname, 'src' ),
 			'node_modules'
 		],
-		extensions: [ '.js', '.vue' ],
+		extensions: [ '.js' ],
 		alias: {
 			'@': path.resolve( __dirname, 'src' )
 		}
 	},
-	externals: {
-		jquery: 'jQuery'
-	},
-	plugins: [
-		new VueLoaderPlugin()
-	],
 	module: {
 		rules: [
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
 				exclude: /node_modules/
-			},
-			{
-				test: /\.vue$/,
-				loader: 'vue-loader'
 			},
 		]
 	}
