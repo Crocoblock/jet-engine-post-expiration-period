@@ -3,7 +3,7 @@
  * Plugin Name: JetEngine Post Expiration Period Module
  * Plugin URI:
  * Description: Also supports JetFormBuilder.
- * Version:     1.1.1
+ * Version:     1.1.2
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-engine-post-expiration-period
@@ -22,7 +22,7 @@ add_action( 'plugins_loaded', 'jet_engine_post_ep_init' );
 
 function jet_engine_post_ep_init() {
 
-    define( 'JET_ENGINE_POST_EP_VERSION', '1.1.1' );
+    define( 'JET_ENGINE_POST_EP_VERSION', '1.1.2' );
 
     define( 'JET_ENGINE_POST_EP__FILE__', __FILE__ );
     define( 'JET_ENGINE_POST_EP_PLUGIN_BASE', plugin_basename( JET_ENGINE_POST_EP__FILE__ ) );
