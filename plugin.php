@@ -48,17 +48,21 @@ class Jet_Engine_Post_PE {
 
 		$this->hooks();
 
-		/*add_action( 'init', function() {
+		add_action( 'init', function () {
 
-		    $pathinfo = pathinfo( JET_ENGINE_POST_EP_PLUGIN_BASE );
+			if ( ! function_exists( 'jet_engine' ) ) {
+				return;
+			}
 
-		    jet_engine()->modules->updater->register_plugin( array(
-			'slug'    => $pathinfo['filename'],
-			'file'    => JET_ENGINE_POST_EP_PLUGIN_BASE,
-			'version' => JET_ENGINE_POST_EP_VERSION
-		    ) );
+			$pathinfo = pathinfo( JET_ENGINE_POST_EP_PLUGIN_BASE );
 
-		}, 12 );*/
+			jet_engine()->modules->updater->register_plugin( array(
+				'slug'    => $pathinfo['filename'],
+				'file'    => JET_ENGINE_POST_EP_PLUGIN_BASE,
+				'version' => JET_ENGINE_POST_EP_VERSION,
+			) );
+
+		}, 12 );
 	}
 
 	public function hooks() {
